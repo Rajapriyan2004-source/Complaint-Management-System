@@ -5,13 +5,23 @@ Django settings for config project.
 
 from pathlib import Path
 import os
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-key-change-before-deploy')
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'dev-only-key-change-before-deploy'
+)
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.204.194.201', '.onrender.com']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '10.204.194.201',
+    '.onrender.com'
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -26,6 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -68,6 +79,12 @@ DATABASES = {
         },
     }
 }
+
+if os.path.exists('/etc/secrets/ca.pem'):
+    DATABASES['default']['OPTIONS']['ssl'] = {
+        'ca': '/etc/secrets/ca.pem',
+    }
+
 # Password validation
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -88,24 +105,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Asia/Kolkata'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
