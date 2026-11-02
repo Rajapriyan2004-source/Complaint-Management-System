@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Complaint Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe, #eef2ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            padding: 40px 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .login-btn {
+            display: block;
+            padding: 15px;
+            margin: 15px auto;
+            max-width: 350px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            background: #2563eb;
+        }
+
+        .admin {
+            background: #15803d;
+        }
+
+        .login-btn:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>College Complaint Management System</h1>
+        <p>Choose your login type to continue</p>
+
+        <!-- Student Login -->
+        <a class="login-btn" href="{% url 'login' %}">
+            Student Login
+        </a>
+
+        <!-- Admin Login -->
+        <a class="login-btn admin"
+           href="{% url 'login' %}?next=/admin-dashboard/">
+            Admin Login
+        </a>
+
+    </div>
+</body>
+</html>

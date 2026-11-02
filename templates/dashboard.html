@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Complaint Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #234a84;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome,
+        .complaints {
+            background: white;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            background: #234a84;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout {
+            background: #dc2626;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .empty {
+            color: #64748b;
+            padding: 15px 0;
+        }
+
+        .messages {
+            color: #166534;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 0 12px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .welcome,
+            .complaints {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h2>Complaint Management System</h2>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="button logout" type="submit">
+                Logout
+            </button>
+        </form>
+    </header>
+
+    <main>
+        <!-- Student Welcome Section -->
+        <section class="welcome">
+            <h2>Welcome, {{ request.user.username }}!</h2>
+
+            <p>
+                Submit your college complaints and track their current
+                status here.
+            </p>
+
+            <a class="button" href="{% url 'submit_complaint' %}">
+                + Submit New Complaint
+            </a>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="messages">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        </section>
+
+        <!-- Student Complaints Section -->
+        <section class="complaints">
+            <h2>My Complaints</h2>
+
+            {% if complaints %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for complaint in complaints %}
+                            <tr>
+                                <td>{{ complaint.id }}</td>
+                                <td>{{ complaint.title }}</td>
+                                <td>{{ complaint.category }}</td>
+                                <td class="status">
+                                    {{ complaint.status }}
+                                </td>
+                                <td>
+                                    {{ complaint.created_at|date:"d M Y" }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="empty">
+                    You have not submitted any complaints yet.
+                </p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

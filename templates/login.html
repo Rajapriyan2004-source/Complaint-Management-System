@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Complaint Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background: white;
+            width: 350px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px #0002;
+        }
+
+        h2 {
+            text-align: center;
+            color: #234a84;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #234a84;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .success {
+            color: green;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+
+        {% if is_admin_login %}
+            <h2>Admin Login</h2>
+        {% else %}
+            <h2>Student Login</h2>
+        {% endif %}
+
+        {% if form.errors %}
+            <p class="error">Invalid username or password.</p>
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="{% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if is_admin_login %}
+                <input type="hidden" name="login_type" value="admin">
+            {% else %}
+                <input type="hidden" name="login_type" value="student">
+            {% endif %}
+
+            <label for="id_username">Username</label>
+            {{ form.username }}
+
+            <label for="id_password">Password</label>
+            {{ form.password }}
+
+            <button type="submit">Login</button>
+        </form>
+
+        {% if not is_admin_login %}
+            <p>
+                New student?
+                <a href="{% url 'register' %}">Register here</a>
+            </p>
+        {% endif %}
+
+    </div>
+</body>
+</html>
